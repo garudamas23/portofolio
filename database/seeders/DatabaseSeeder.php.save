@@ -1,0 +1,50 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Experience;
+use App\Models\Education;
+use App\Models\Skill;
+use App\Models\Project;
+
+class PortfolioSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $this->call([
+            PortfolioSeeder::class,
+        ]);
+
+        // Buat user admin
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@portfolio.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+        ]);
+
+        // Data pengalaman
+        Experience::create([
+            'title' => 'Full Stack Developer',
+            'company' => 'PT. Teknologi Indonesia',
+            'start_date' => '2022-01-01',
+            'end_date' => null,
+            'current' => true,
+            'description' => 'Mengembangkan aplikasi web menggunakan Laravel dan Vue.js. Bertanggung jawab atas pengembangan frontend dan backend.'
+        ]);
+
+        Experience::create([
+            'title' => 'Web Developer',
+            'company' => 'CV. Digital Solution',
+            'start_date' => '2020-03-01',
+            'end_date' => '2021-12-31',
+            'current' => false,
+            'description' => 'Membangun website company profile dan e-commerce untuk berbagai klien.'
+        ]);
+
+        // Data pendidikan
+       Education::create([X
+            'degree' => 'Sarjana Teknik Informa
+X
