@@ -1,86 +1,78 @@
-@extends('layouts.portfolio') {{-- GUNAKAN LAYOUT PORTFOLIO BARU --}}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $portfolioData['user']->name ?? 'My Portfolio' }} - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- DEBUG: Tampilkan info data -->
+    <style>
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 1000;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- DEBUG INFO -->
+    <div class="debug-info">
+        <strong>DEBUG INFO:</strong><br>
+        User: {{ $portfolioData['user']->name ?? 'NO USER' }}<br>
+        Bio Length: {{ strlen($portfolioData['user']->bio ?? '') }} chars<br>
+        Title: {{ $portfolioData['user']->professional_title ?? 'NO TITLE' }}<br>
+        Updated: {{ $portfolioData['user']->updated_at ?? 'UNKNOWN' }}<br>
+        <small>Cache: {{ Cache::has('public_portfolio_data') ? 'HIT' : 'MISS' }}</small>
+    </div>
 
-@section('title', ($portfolioData['user']->name ?? 'My Portfolio') . ' - Portfolio')
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-100">
+        <!-- ... navigation code ... -->
+    </nav>
 
-@section('content')
     <!-- Hero Section -->
     <section id="about" class="bg-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            @if($portfolioData['user']->photo)
+                <img src="{{ asset('storage/' . $portfolioData['user']->photo) }}" 
+                     alt="{{ $portfolioData['user']->name }}" 
+                     class="w-32 h-32 rounded-full mx-auto mb-6 object-cover border-4 border-indigo-100">
+            @else
+                <div class="w-32 h-32 rounded-full mx-auto mb-6 bg-gray-200 flex items-center justify-center border-4 border-indigo-100">
+                    <i class="fas fa-user text-gray-400 text-4xl"></i>
+                </div>
+            @endif
+            
             <h1 class="text-4xl font-bold text-gray-900">{{ $portfolioData['user']->name ?? 'Your Name' }}</h1>
-            <p class="text-xl text-gray-600 mt-4">{{ $portfolioData['user']->title ?? 'Full Stack Developer' }}</p>
-            <p class="text-gray-500 mt-6 max-w-2xl mx-auto">
-                {{ $portfolioData['user']->description ?? 'Portfolio description...' }}
+            <p class="text-xl text-gray-600 mt-4">{{ $portfolioData['user']->professional_title ?? 'Professional Title' }}</p>
+            <p class="text-gray-500 mt-6 max-w-2xl mx-auto leading-relaxed text-lg">
+                {{ $portfolioData['user']->bio ?? 'Portfolio description...' }}
             </p>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Pengalaman</h2>
             
-            @if($portfolioData['experiences']->count() > 0)
-            <div class="space-y-8">
-                @foreach($portfolioData['experiences'] as $experience)
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-semibold text-gray-800">{{ $experience->position }}</h3>
-                    <p class="text-gray-600">{{ $experience->company }} | {{ $experience->start_date }} - {{ $experience->end_date ?? 'Present' }}</p>
-                    <p class="text-gray-500 mt-2">{{ $experience->description }}</p>
-                </div>
-                @endforeach
-            </div>
-            @else
-            <div class="text-center py-8">
-                <p class="text-gray-500">No experience added yet.</p>
-            </div>
-            @endif
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Proyek</h2>
-            
-            @if($portfolioData['projects']->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($portfolioData['projects'] as $project)
-                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-800">{{ $project->name }}</h3>
-                    <p class="text-gray-600 mt-2">{{ $project->description }}</p>
-                    @if($project->link)
-                    <a href="{{ $project->link }}" target="_blank" 
-                       class="inline-block mt-4 text-blue-600 hover:text-blue-800 font-medium">
-                        Lihat Proyek →
-                    </a>
-                    @endif
-                </div>
-                @endforeach
-            </div>
-            @else
-            <div class="text-center py-8">
-                <p class="text-gray-500">No projects yet.</p>
-            </div>
-            @endif
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8">Kontak</h2>
-            <div class="space-y-4 max-w-md mx-auto">
+            <!-- DEBUG: Tampilkan data contact -->
+            <div class="mt-8 flex justify-center space-x-6 text-sm text-gray-500">
                 @if($portfolioData['user']->email)
-                <p class="text-gray-600">
-                    <strong>Email:</strong> {{ $portfolioData['user']->email }}
-                </p>
+                    <span><i class="fas fa-envelope mr-1"></i> {{ $portfolioData['user']->email }}</span>
+                @endif
+                @if($portfolioData['user']->location)
+                    <span><i class="fas fa-map-marker-alt mr-1"></i> {{ $portfolioData['user']->location }}</span>
                 @endif
                 @if($portfolioData['user']->phone)
-                <p class="text-gray-600">
-                    <strong>Telepon:</strong> {{ $portfolioData['user']->phone }}
-                </p>
+                    <span><i class="fas fa-phone mr-1"></i> {{ $portfolioData['user']->phone }}</span>
                 @endif
             </div>
         </div>
     </section>
-@endsection
+
+    <!-- ... rest of the sections ... -->
+</body>
+</html>

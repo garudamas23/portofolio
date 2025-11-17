@@ -24,7 +24,14 @@ class User extends Authenticatable
         'website',
         'linkedin',
         'github',
-        'twitter'
+        'twitter',
+        'profile_public',        
+        'skills_public',         
+        'projects_public',       
+        'experiences_public',    
+        'educations_public',     
+        'last_updated',          
+        'portfolio_updated_at',  
     ];
 
     protected $hidden = [
@@ -37,7 +44,12 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_admin' => 'boolean'
+            'is_admin' => 'boolean',
+            'profile_public' => 'boolean',     
+            'skills_public' => 'boolean',      
+            'projects_public' => 'boolean',    
+            'experiences_public' => 'boolean', 
+            'educations_public' => 'boolean', 
         ];
     }
 

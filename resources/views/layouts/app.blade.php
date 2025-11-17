@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@yield('title', config('app.name', 'Laravel'))</title>
+        <title>@yield('title', ($user->name ?? config('app.name', 'Laravel')))</title>
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -12,21 +12,62 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
-        <!-- FontAwesome -->
+        <!-- FontAwesome & Tailwind -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-        
-        <!-- Tailwind CSS CDN sebagai fallback -->
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            <!-- Navigation -->
-            @include('layouts.navigation')
+        <!-- SMART NAVIGATION - AUTO DETECT FRONTEND/BACKEND -->
+        @if(request()->is('admin/*'))
+            {{-- ADMIN LAYOUT --}}
+            @include('admin.layout')
+        @else
+            {{-- FRONTEND LAYOUT --}}
+            <nav class="bg-white shadow-sm border-b border-gray-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16">
+                        <!-- Logo -->
+                        <div class="flex items-center">
+                            <a href="{{ route('home') }}" class="text-xl font-bold text-gray-900">
+                                {{ $user->name ?? 'My Portfolio' }}
+                            </a>
+                        </div>
+
+                        <!-- Navigation Links -->
+                        <div class="hidden sm:flex sm:items-center space-x-8">
+                            <a href="#about" class="text-gray-600 hover:text-gray-900">Tentang</a>
+                            <a href="#experience" class="text-gray-600 hover:text-gray-900">Pengalaman</a>
+                            <a href="#projects" class="text-gray-600 hover:text-gray-900">Proyek</a>
+                            <a href="#contact" class="text-gray-600 hover:text-gray-900">Kontak</a>
+                            
+                            <!-- Smart Admin/Login Link -->
+                            @auth
+                                <a href="{{ route('admin.dashboard') }}" 
+                                   class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 ml-4">
+                                    <i class="fas fa-cog mr-1"></i> Admin
+                                </a>
+                            @else
+                                <a href="{{ route('login') }}" 
+                                   class="text-gray-600 hover:text-gray-900 ml-4">
+                                    Login
+                                </a>
+                            @endauth
+                        </div>
+                    </div>
+                </div>
+            </nav>
 
             <!-- Page Content -->
-            <main>
+            <main class="min-h-screen bg-gray-50">
                 @yield('content')
             </main>
-        </div>
+
+            <!-- Footer -->
+            <footer class="bg-white border-t border-gray-200 py-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
+                    <p>&copy; {{ date('Y') }} {{ $user->name ?? 'My Portfolio' }}</p>
+                </div>
+            </footer>
+        @endif
     </body>
 </html>

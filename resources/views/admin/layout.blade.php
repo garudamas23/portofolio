@@ -19,6 +19,12 @@
                 <a href="{{ route('admin.dashboard') }}" class="block py-3 px-4 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-700 border-r-4 border-indigo-500' : '' }}">
                     <i class="fas fa-tachometer-alt mr-3"></i>Dashboard
                 </a>
+                
+                <!-- 🎯 TAMBAH MENU EDIT PROFIL DI SINI -->
+                <a href="{{ route('profile.edit') }}" class="block py-3 px-4 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('profile.*') ? 'bg-gray-700 border-r-4 border-indigo-500' : '' }}">
+                    <i class="fas fa-user-edit mr-3"></i>Edit Profil
+                </a>
+                
                 <a href="{{ route('admin.experiences.index') }}" class="block py-3 px-4 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('admin.experiences.*') ? 'bg-gray-700 border-r-4 border-indigo-500' : '' }}">
                     <i class="fas fa-briefcase mr-3"></i>Pengalaman
                 </a>
@@ -30,11 +36,6 @@
                 </a>
                 <a href="{{ route('admin.projects.index') }}" class="block py-3 px-4 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('admin.projects.*') ? 'bg-gray-700 border-r-4 border-indigo-500' : '' }}">
                     <i class="fas fa-project-diagram mr-3"></i>Proyek
-                </a>
-                
-                <!-- MENU EDIT PROFIL - PASTIKAN ADA DI SINI -->
-                <a href="{{ route('profile.edit') }}" class="block py-3 px-4 text-gray-100 hover:bg-gray-700 {{ request()->routeIs('profile.*') ? 'bg-gray-700 border-r-4 border-indigo-500' : '' }}">
-                    <i class="fas fa-user-edit mr-3"></i>Edit Profil
                 </a>
                 
                 <div class="border-t border-gray-700 mt-4 pt-4">
@@ -78,7 +79,6 @@
     </div>
 
     <script>
-        // Simple confirmation for delete actions
         document.addEventListener('DOMContentLoaded', function() {
             const deleteForms = document.querySelectorAll('form[action*="destroy"]');
             deleteForms.forEach(form => {
